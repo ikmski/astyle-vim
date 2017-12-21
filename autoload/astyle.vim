@@ -23,19 +23,26 @@ endfunction
 
 function! astyle#find_option_file(mode)
 
-    let l:option_file = ""
+    let l:file_name = ""
 
     if a:mode == "c"
-        let l:option_file = "astyle_options_c"
+        let l:file_name = "astyle_options_c"
     elseif a:mode == "csharp"
-        let l:option_file = "astyle_options_csharp"
+        let l:file_name = "astyle_options_csharp"
     elseif a:mode == "java"
-        let l:option_file = "astyle_options_java"
+        let l:file_name = "astyle_options_java"
+    else
+        return ""
     endif
 
-    if l:option_file != "" && filereadable(l:option_file)
-        return l:option_file
-    endif
+    for l:dir in [".git/", "~/."]
+
+        let l:option_file = l:dir . l:file_name
+        if filereadable(l:option_file)
+            return l:option_file
+        endif
+
+    endfor
 
     return ""
 
